@@ -1,7 +1,9 @@
-# Nix flake GitHub Actions CI template
+# Haskell Nix flake GitHub Actions CI template
 
-A template for setting up GitHub Actions with [Nix flakes](https://nixos.wiki/wiki/Flakes).
+An opinionated template for setting up a Haskell project that uses
+[Nix flakes](https://nixos.wiki/wiki/Flakes) and builds using GitHub Actions.
 
+![Haskell](https://img.shields.io/badge/Haskell-5e5086?style=for-the-badge&logo=haskell&logoColor=white)
 ![Nix](https://img.shields.io/badge/nix-0175C2?style=for-the-badge&logo=NixOS&logoColor=white)
 
 ## Setup
@@ -11,7 +13,7 @@ to start a repo based on this template. **Do _not_ fork it.**
 2. Set up a [Cachix binary cache](https://app.cachix.org/cache) and add the
 `CACHIX_AUTH_TOKEN` variable to the repository.
 3. Change the `name` fields in [`nix-build.yaml`](./.github/workflows/nix-build.yml).
-4. Add your tests to [`mkTest` in the `ci-overlay.nix`](./nix/ci-overlay.nix).
+4. Add your tests to [`mkTest` in the `overlay.nix`](./nix/overlay.nix).
 
 ## Contributing
 

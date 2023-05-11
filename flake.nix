@@ -1,5 +1,7 @@
 {
-  description = "Nix flake CI template for GitHub Actions"; # TODO: Set description
+  # TODO: Add description here
+  description = ''
+  '';
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
@@ -30,32 +32,52 @@
       "x86_64-darwin"
       "x86_64-linux"
     ];
+
+    overlay = import ./nix/overlay.nix {};
   in
     flake-utils.lib.eachSystem supportedSystems (system: let
-      ci-overlay = import ./nix/ci-overlay.nix {};
-
       pkgs = import nixpkgs {
         inherit system;
         overlays = [
-          ci-overlay
+          overlay
         ];
       };
 
       pre-commit-check = pre-commit-hooks.lib.${system}.run {
         src = self;
         hooks = {
+          cabal2nix.enable = true;
           alejandra.enable = true;
           editorconfig-checker.enable = true;
           markdownlint.enable = true;
+          fourmolu.enable = true;
+          hpack.enable = true;
+          hlint.enable = true;
         };
       };
 
-      devShell = pkgs.mkShell {
-        name = "devShell"; # TODO: Choose a name
-        inherit (pre-commit-check) shellHook;
-        buildInputs = with pkgs; [
-          zlib
-        ];
+      devShell = pkgs.haskellPackages.shellFor {
+        name = "devShell"; # TODO: Set name here
+        packages = p: with p; [];
+        withHoogle = true;
+        buildInputs =
+          (with pkgs; [
+            haskell-language-server
+            cabal-install
+            zlib
+          ])
+          ++ (with pre-commit-hooks.packages.${system}; [
+            hlint
+            hpack
+            fourmolu
+            cabal2nix
+            editorconfig-checker
+            markdownlint-cli
+            alejandra
+          ]);
+        shellHook = ''
+          ${self.checks.${system}.pre-commit-check.shellHook}
+        '';
       };
     in {
       devShells = {
@@ -63,17 +85,19 @@
         inherit devShell;
       };
 
-      # overlays = {
-      # };
-
       # packages = {
       # };
 
       checks = {
-        formatting = pre-commit-check;
+        pre-commit-check = pre-commit-check;
         # inherit
         #   (pkgs)
         #   ;
       };
-    });
+    })
+    // {
+      overlays = {
+        default = overlay;
+      };
+    };
 }
