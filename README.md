@@ -8,7 +8,7 @@ An opinionated template for setting up a Haskell project that uses
 
 ## Setup
 
-1. Click on [Use this template](https://github.com/MrcJkb/nix-flake-github-ci-template/generate)
+1. Click on [Use this template](https://github.com/mrcjkb/haskell-nix-flake-github-ci-template/generate)
 to start a repo based on this template. **Do _not_ fork it.**
 2. Set up a [Cachix binary cache](https://app.cachix.org/cache) and add the
 `CACHIX_AUTH_TOKEN` variable to the repository.
