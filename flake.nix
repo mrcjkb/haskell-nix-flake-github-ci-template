@@ -75,6 +75,8 @@
             markdownlint-cli
             alejandra
           ]);
+        # Setting NIX_PATH lets Stack fetch ghc from the nix store
+        NIX_PATH = "nixpkgs=" + pkgs.path;
         shellHook = ''
           ${self.checks.${system}.pre-commit-check.shellHook}
         '';
