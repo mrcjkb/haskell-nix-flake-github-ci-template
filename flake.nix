@@ -64,6 +64,7 @@
           (with pkgs; [
             haskell-language-server
             cabal-install
+            haskellPackages.implicit-hie
             zlib
           ])
           ++ (with pre-commit-hooks.packages.${system}; [
