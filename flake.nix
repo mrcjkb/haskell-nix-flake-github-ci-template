@@ -67,15 +67,7 @@
             haskellPackages.implicit-hie
             zlib
           ])
-          ++ (with pre-commit-hooks.packages.${system}; [
-            hlint
-            hpack
-            fourmolu
-            cabal2nix
-            editorconfig-checker
-            markdownlint-cli
-            alejandra
-          ]);
+          ++ self.checks.${system}.pre-commit-check.enabledPackages;
         # Setting NIX_PATH lets Stack fetch ghc from the nix store
         NIX_PATH = "nixpkgs=" + pkgs.path;
         shellHook = ''
